@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title> INFO5100 Project 1 Visualization 1 </title>
+</head>
+<body>
+    <svg id="plot" height="500" width="500" ></svg>
+    <script>
+        const svg = d3.select('svg#plot');
+        const width = svg.attr('width');
+        const height = svg.attr('height');
+        const margin = {top: 10, right: 10, bottom: 30, left: 30};
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+
+        let chartArea = svg.append('g')
+                           .attr('transform',`translate(${margin.left},${margin.top})`);
+
+        d3.csv('../graph1.csv', d3.autoType).then( (data) => {
+            console.log(data);
+            //SCALES
+            const popExtent = d3.extent(data, d => d['population'] );
+            console.log(popExtent);
+            const popScale = d3.scaleLinear().domain(popExtent).range([chartHeight, 0]);
+
+            const gdpExtent = d3.extent(data, d => d['gdp_per_capita'] );
+            console.log(gdpExtent);
+
+            const gdpScale = d3.scaleLinear().domain(gdpExtent).range([0, chartWidth]);
+
+            const medalExtent = d3.extent(data, d => d['Medal Count'] );
+            const medalScale = d3.scaleLinear().domain(medalExtent).range([0, chartWidth]);
+
+
+            //vertical axis
+            chartArea.append("line")
+                  .attr("x1", margin.bottom)
+                  .attr("x2", margin.bottom)
+                  .attr("y1", 500-margin.bottom)
+                  .attr("y2", margin.bottom)
+                  .style("stroke", "lightgrey")
+                  .style("stroke-weight", 2);
+
+            //horizontal axis
+            chartArea.append("line")
+                  .attr("x1", margin.bottom)
+                  .attr("x2", 500-margin.bottom)
+                  .attr("y1", 500-margin.bottom)
+                  .attr("y2", 500-margin.bottom)
+                  .style("stroke", "lightgrey")
+                  .style("stroke-weight", 2);
+
+            // //tickmarks
+            // let leftTicks = d3.axisLeft(popScale)
+            //                       .tickSize(10)
+            //                       .tickFormat('')
+            //                       .call(leftTicks);
+
+
+            //horizontal text labels
+            let horLabels = ["10K", "20K", "30K", "40K", "50K", "60K"];
+            let xpos = chartWidth/7
+            horLabels.forEach ((d, i) => {
+                chartArea.append("text")
+                    .attr("text-anchor","middle")
+                    .attr("font-size","10px")
+                    .attr("x", xpos+10)
+                    .attr("y",490)
+                    .text(horLabels[i])
+                    .style("font-family","Arial");
+                    xpos = xpos + chartWidth/7;
+                });
+
+            //vertical text labels
+            let verLabels = ["50M", "100M", "150M", "200M", "250M", "300M", "350M", "...", "1.5B"];
+            let ypos = chartHeight/10
+            verLabels.forEach ((d, i) => {
+                chartArea.append("text")
+                    .attr("text-anchor","middle")
+                    .attr("font-size","10px")
+                    .attr("x", 10)
+                    .attr("y",chartHeight-ypos+10)
+                    .text(verLabels[i])
+                    .style("font-family","Arial");
+                    ypos = ypos + chartHeight/10;
+            });
+
+            //Circles
+            data.forEach( (d, i) => {
+                chartArea.append("circle")
+                    .attr("cx", gdpScale(d['gdp_per_capita']))
+                    .attr("cy", popScale(d['population'] ))
+                    .attr("r", 5)
+                    .style("fill","darkblue");
+            });
+
+
+
+
+
+
+        });
+    </script>
