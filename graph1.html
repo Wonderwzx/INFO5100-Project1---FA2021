@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title> INFO5100 Project 1 Visualization 1 </title>
+</head>
+<body>
+    <h3> GDP per capita and population of the Top 10 Medal-Winning Countries </h3>
+    <p> description blah </p>
+
+    <svg id="plot" height="500" width="1000" ></svg>
+    <script>
+        const svg = d3.select('svg#plot');
+        const width = svg.attr('width');
+        const height = svg.attr('height');
+        // const margins = {top: 10, right: 10, bottom: 50, left: 100};
+        // const chartWidth = width - margins.left - margins.right;
+        // const chartHeight = height - margins.top - margins.bottom;
+
+        // let chartArea = svg.append('g')
+        //                    .attr('transform',`translate(${margins.left},${margins.top})`);
+        const margin = {top: 10, right: 10, bottom: 30, left: 30};
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+
+        let chartArea = svg.append('g')
+                           .attr('transform',`translate(${margin.left},${margin.top})`);
+
+        d3.csv('../graph1.csv', d3.autoType).then( (data) => {
+            console.log(data);
+            //SCALES
+            const popExtent = d3.extent(data, d => d['population'] );
+            console.log(popExtent);
+            const popScale = d3.scaleLinear().domain(popExtent).range([height-20, 0]);
+
+            const gdpExtent = d3.extent(data, d => d['gdp_per_capita'] );
+            console.log(gdpExtent);
+            const gdpScale = d3.scaleLinear().domain(gdpExtent).range([10, width-10]);
+
+            const medalExtent = d3.extent(data, d => d['Medal Count'] );
+            const medalScale = d3.scaleLinear().domain(medalExtent).range([0, width]);
+
+
+            //vertical axis
+            svg.append("line")
+                  .attr("x1", 40)
+                  .attr("x2", 40)
+                  .attr("y1", 460)
+                  .attr("y2", 40)
+                  .style("stroke", "lightgrey")
+                  .style("stroke-weight", 30);
+
+
+            // //horizontal axis
+            svg.append("line")
+                  .attr("x1", 40)
+                  .attr("x2", 1000)
+                  .attr("y1", 460)
+                  .attr("y2", 460)
+                  .style("stroke", "lightgrey")
+                  .style("stroke-weight", 30);
+
+
+            // //tickmarks
+            // let leftTicks = d3.axisLeft(popScale)
+            //                       .tickSize(10)
+            //                       .tickFormat('')
+            //                       .call(leftTicks);
+
+
+            //horizontal text labels
+            let horLabels = ["0K","10K", "20K", "30K", "40K", "50K", "60K"];
+            let xpos = 48
+            horLabels.forEach ((d, i) => {
+                svg.append("text")
+                    .attr("text-anchor","middle")
+                    .attr("font-size","10px")
+                    .attr("x", xpos)
+                    .attr("y",480)
+                    .text(horLabels[i])
+                    .style("font-family","Arial");
+            xpos = xpos + width/7;
+                });
+
+            //vertical text labels
+            let verLabels = ["0M", "50M", "100M", "150M", "200M", "250M", "300M", "350M", "...", "1.5B"];
+            let ypos = 40
+            verLabels.forEach ((d, i) => {
+                svg.append("text")
+                    .attr("text-anchor","middle")
+                    .attr("font-size","10px")
+                    .attr("x", 18)
+                    .attr("y",height-ypos)
+                    .text(verLabels[i])
+                    .style("font-family","Arial");
+            ypos = ypos + height/11;
+            });
+
+            //Circles
+            //Korea 50617045,27221.52405
+            svg.append("circle")
+                    .attr("cx", 430)
+                    .attr("cy", 410)
+                    .attr("r", 15)
+                    .style("fill","red");
+
+            //Italy 60802085,29957.80432
+            svg.append("circle")
+                    .attr("cx", 470)
+                    .attr("cy", 400)
+                    .attr("r", 19.5)
+                    .style("fill","green");
+
+            //Australia 23781169,56310.96299,29
+            svg.append("circle")
+                    .attr("cx", 850)
+                    .attr("cy", 435)
+                    .attr("r", 20.7)
+                    .style("fill","yellow");
+
+            //Japan 126958472,32477.21514
+            svg.append("circle")
+                    .attr("cx", 520)
+                    .attr("cy", 350)
+                    .attr("r", 29.3)
+                    .style("fill","darkred");
+
+            //France 66808385,36205.5681
+            svg.append("circle")
+                    .attr("cx", 570)
+                    .attr("cy", 385)
+                    .attr("r", 30)
+                    .style("fill","pink");
+
+            //Russia 144096812,9092.580536
+            svg.append("circle")
+                    .attr("cx", 160)
+                    .attr("cy", 340)
+                    .attr("r", 40)
+                    .style("fill","orange");
+
+            //UK 65138232,43875.96961
+            svg.append("circle")
+                    .attr("cx", 660)
+                    .attr("cy", 390)
+                    .attr("r", 48)
+                    .style("fill","purple");
+
+            //Germany 81413145,41313.31399
+            svg.append("circle")
+                    .attr("cx", 640)
+                    .attr("cy", 379)
+                    .attr("r", 30)
+                    .style("fill","blue");
+
+            //China 1371220000,8027.68381
+            svg.append("circle")
+                    .attr("cx", 150)
+                    .attr("cy", 80)
+                    .attr("r", 50)
+                    .style("fill","hotpink");
+
+            //USA 321418820,56115.71843
+            svg.append("circle")
+                    .attr("cx", 850)
+                    .attr("cy", 165)
+                    .attr("r", 86)
+                    .style("fill","lightblue");
+
+
+        });
+    </script>
