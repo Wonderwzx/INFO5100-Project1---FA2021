@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title> INFO5100 Project 1 Visualization </title>
+</head>
+<body>
+    <h3> Graph 1: GDP per capita and population of the Top 10 Medal-Winning Countries </h3>
+    <p> Our team wanted to explore how Olympic medal winning differs for countries based on their gross domestic product and population size. <br>The visualization below illustrates the top ten medal winning countries during the Rio 2016 Olympics by circles of different area, with their GDP per capita and population for reference on the axes.<br>We found that countries of higher GDP per capita generally won more metals; however, outliers such as China ranked high because of their overwhelming population size. </p>
+    <br>
+    <svg id="plot" height="500" width="1500" ></svg>
+    <script>
+        const svg = d3.select('svg#plot');
+        const width = svg.attr('width');
+        const height = svg.attr('height');
+        // const margins = {top: 10, right: 10, bottom: 50, left: 100};
+        // const chartWidth = width - margins.left - margins.right;
+        // const chartHeight = height - margins.top - margins.bottom;
+
+        // let chartArea = svg.append('g')
+        //                    .attr('transform',`translate(${margins.left},${margins.top})`);
+        const margin = {top: 10, right: 10, bottom: 50, left: 50};
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+
+        let chartArea = svg.append('g')
+                           .attr('transform',`translate(${margin.left},${margin.top})`);
+
+        d3.csv('../graph1.csv', d3.autoType).then( (data) => {
+            // console.log(data);
+            // //SCALES
+            // const popExtent = d3.extent(data, d => d['population'] );
+            // console.log(popExtent);
+            // const popScale = d3.scaleLinear().domain(popExtent).range([height-20, 0]);
+            //
+            // const gdpExtent = d3.extent(data, d => d['gdp_per_capita'] );
+            // console.log(gdpExtent);
+            // const gdpScale = d3.scaleLinear().domain(gdpExtent).range([10, width-10]);
+            //
+            // const medalExtent = d3.extent(data, d => d['Medal Count'] );
+            // const medalScale = d3.scaleLinear().domain(medalExtent).range([0, width]);
+
+
+            //vertical axis
+            svg.append("line")
+                  .attr("x1", 40)
+                  .attr("x2", 40)
+                  .attr("y1", 460)
+                  .attr("y2", 40)
+                  .style("stroke", "lightgrey")
+                  .style("stroke-weight", 30);
+
+            //horizontal axis
+            svg.append("line")
+                  .attr("x1", 40)
+                  .attr("x2", 1000)
+                  .attr("y1", 460)
+                  .attr("y2", 460)
+                  .style("stroke", "lightgrey")
+                  .style("stroke-weight", 30);
+
+            //horizontal text labels
+            let horLabels = ["0K","10K", "20K", "30K", "40K", "50K", "60K"];
+            let xpos = 48
+            horLabels.forEach ((d, i) => {
+                svg.append("text")
+                    .attr("text-anchor","middle")
+                    .attr("font-size","12px")
+                    .attr("x", xpos)
+                    .attr("y",480)
+                    .text(horLabels[i])
+                    .style("font-family","Arial");
+            xpos = xpos + 1000/7;
+                });
+
+            //vertical text labels
+            let verLabels = ["0M", "50M", "100M", "150M", "200M", "250M", "300M", "350M", "...", "1.5B"];
+            let ypos = 40
+            verLabels.forEach ((d, i) => {
+                svg.append("text")
+                    .attr("text-anchor","middle")
+                    .attr("font-size","12px")
+                    .attr("x", 18)
+                    .attr("y",500-ypos)
+                    .text(verLabels[i])
+                    .style("font-family","Arial");
+            ypos = ypos + 500/11;
+            });
+            svg.append("text")
+                .attr("x",5)
+                .attr("y",17)
+                .text("Population");
+            svg.append("text")
+                .attr("x",1020)
+                .attr("y",465)
+                .text("GDP Per Capita");
+
+            //Circles
+            //Korea 50617045,27221.52405
+            svg.append("circle")
+                    .attr("cx", 430)
+                    .attr("cy", 410)
+                    .attr("r", 15)
+                    .style("fill","red");
+
+            //Italy 60802085,29957.80432
+            svg.append("circle")
+                    .attr("cx", 470)
+                    .attr("cy", 400)
+                    .attr("r", 19.5)
+                    .style("fill","green");
+
+            //Australia 23781169,56310.96299,29
+            svg.append("circle")
+                    .attr("cx", 850)
+                    .attr("cy", 435)
+                    .attr("r", 20.7)
+                    .style("fill","yellow");
+
+            //Japan 126958472,32477.21514
+            svg.append("circle")
+                    .attr("cx", 520)
+                    .attr("cy", 350)
+                    .attr("r", 29.3)
+                    .style("fill","darkred");
+
+            //France 66808385,36205.5681
+            svg.append("circle")
+                    .attr("cx", 570)
+                    .attr("cy", 385)
+                    .attr("r", 30)
+                    .style("fill","pink");
+
+            //Russia 144096812,9092.580536
+            svg.append("circle")
+                    .attr("cx", 160)
+                    .attr("cy", 340)
+                    .attr("r", 40)
+                    .style("fill","orange");
+
+            //UK 65138232,43875.96961
+            svg.append("circle")
+                    .attr("cx", 660)
+                    .attr("cy", 390)
+                    .attr("r", 48)
+                    .style("fill","purple");
+
+            //Germany 81413145,41313.31399
+            svg.append("circle")
+                    .attr("cx", 640)
+                    .attr("cy", 379)
+                    .attr("r", 30)
+                    .style("fill","blue");
+
+            //China 1371220000,8027.68381
+            svg.append("circle")
+                    .attr("cx", 150)
+                    .attr("cy", 80)
+                    .attr("r", 50)
+                    .style("fill","hotpink");
+
+            //USA 321418820,56115.71843
+            svg.append("circle")
+                    .attr("cx", 850)
+                    .attr("cy", 165)
+                    .attr("r", 86)
+                    .style("fill","lightblue");
+
+        //legend
+        let colorarr= ["lightblue","hotpink","blue","purple","orange","pink","darkred","yellow","green","red"]
+        let countryarr=["USA: 121 Medals", "CHN: 70 Medals", "GBR: 67 Medals", "RUS: 56 Medals", "GER: 42 Medals", "FRA: 42 Medals", "JPN: 41 Medals", "AUS: 29 Medals", "ITA: 28 Medals", "KOR: 21 Medals"]
+        // y=40
+
+        for (x=0; x < 10; x++) {
+            data.forEach ( (d, i) => {
+                svg.append("circle")
+                    .attr("cx", 1100)
+                    .attr("cy", 40+x*40)
+                    .attr("r", 15)
+                    .style("fill", colorarr[x])
+                svg.append("text")
+                    .attr("x", 1120)
+                    .attr("y", 45+x*40)
+                    .attr("font-size",15)
+                    .text("alignment-baseline","middle")
+                    .text(countryarr[x])
+                    .style("fill", "black")
+            })
+        }
+    });
+    </script>
+    <br>
+
+    <h3>
+        Graph 2: <br/>
+    </h3>
+    <h4>
+        In this graph we explore the relationship between gender and medals.<br/>
+        The visualization illustrates gender proportions in medals in top ten countries.
+    </h4>
+    <div>
+        <svg id="graph2" height=500 width=1100>
+        </svg>
+    </div>
+    <script>
+        // d3.csv('../Project1/athletes.csv',d3.autotype).then((data)=>{
+        //     console.log(data);
+        // });
+
+        // const svg = d3.select("svg#graph2");
+        // const width = svg.attr("width");
+        // const height = svg.attr("height");
+        // const margin = {top: 10, right: 10, bottom: 40, left: 40};
+        // const chartWidth = width - margin.left - margin.right;
+        // const chartHeight = height - margin.top - margin.bottom;
+
+        // let chartArea = svg.append('g')
+        //                    .attr('transform',`translate(${margin.left},${margin.top})`);
+
+        const svg2 = d3.select("svg#graph2");
+        const width2 = svg2.attr('width');
+        const height2 = svg2.attr('height');
+        const margin2 = {top: 10, right: 10, bottom: 40, left: 40};
+        const chartWidth2 = width2 - margin2.left - margin2.right;
+        const chartHeight2 = height2 - margin2.top - margin2.bottom;
+
+        let chartArea2 = svg2.append('g')
+                           .attr('transform',`translate(${margin2.left},${margin2.top})`);
+
+        let leaderboard = [
+            
+        {"Country":'USA', "medals":113,"G":39, "GM":16, "GF":23,"S":41,"SM":15,"SF":22,"B":33,"BM":10,"BF":21},
+        {"Country":'CHN', "medals":88, "G":38, "GM":13, "GF":22,"S":32,"SM":13,"SF":16,"B":18,"BM":9,"BF":9},
+        {"Country":'ROC', "medals":71, "G":20, "GM":10, "GF":9,"S":28,"SM":11,"SF":15,"B":23,"BM":14,"BF":8},
+        {"Country":'GBR', "medals":65, "G":22, "GM":12, "GF":6,"S":21,"SM":12,"SF":7,"B":20,"BM":10,"BF":10},
+        {"Country":'JPN', "medals":58, "G":27, "GM":12, "GF":14,"S":14,"SM":5,"SF":8,"B":17,"BM":8,"BF":8},
+        {"Country":'AUS', "medals":46, "G":17, "GM":7, "GF":10,"S":7,"SM":3,"SF":3,"B":22,"BM":10,"BF":9},
+        {"Country":'ITA', "medals":40, "G":10, "GM":7, "GF":2,"S":10,"SM":7,"SF":3,"B":20,"BM":10,"BF":10},
+        {"Country":'GER', "medals":37, "G":10, "GM":3, "GF":4,"S":11,"SM":7,"SF":3,"B":16,"BM":9,"BF":5},
+        {"Country":'NED', "medals":36, "G":10, "GM":5, "GF":5,"S":12,"SM":7,"SF":4,"B":14,"BM":1,"BF":12},
+        {"Country":'FRA', "medals":33, "G":10, "GM":7, "GF":2,"S":12,"SM":4,"SF":8,"B":11,"BM":4,"BF":5},
+            
+        ];
+        console.log(leaderboard);
+        // const xExtent = d3.extent()
+        // const yExtent = d3.extent()
+        const CountryScale = d3.scaleLinear().domain([0,10]).range([0,1000]);
+        const MedalScale = d3.scaleLinear().domain([0,45]).range([460,10]);
+        
+        console.log(MedalScale(0));
+
+        let leftAxis = d3.axisLeft(MedalScale).ticks(10);
+        svg2.append('g')
+            .attr("class","y axis")
+            .attr('transform',`translate(40,0)`)
+            .call(leftAxis);
+        
+        console.log(MedalScale(45));
+
+        let bottomAxis = d3.axisBottom(CountryScale).ticks(0);
+        svg2.append('g')
+            .attr("class","x axis")
+            .attr('transform',`translate(40,460)`)
+            .call(bottomAxis);
+        
+
+        leaderboard.forEach((d,i) =>{
+            svg2.append("text")
+                .attr("text-anchor","middle")
+                .attr("font-size","15px")
+                .attr("x", 100+100*i)
+                .attr("y",490)
+                .text(d['Country'])
+                .style("font-family","Arial");
+            
+            svg2.append("text")
+                .attr("text-anchor","middle")
+                .attr("font-size","10px")
+                .attr("x", 60)
+                .attr("y", 10)
+                .text("Medals")
+                .style("font-family","Arial");
+
+            svg2.append("text")
+                .attr("text-anchor","middle")
+                .attr("font-size","15px")
+                .attr("x", 1050)
+                .attr("y", 480)
+                .text("Countries")
+                .style("font-family","Arial");
+            
+            svg2.append("text")
+                .attr("text-anchor","middle")
+                .attr("dominant-baseline","hanging")
+                .attr("font-weight","bold")
+                .attr("font-size","10px")
+                .attr("x", 100+100*i-25)
+                .attr("y",462)
+                .text("G")
+                .style("font-family","Arial");
+
+            svg2.append("text")
+                .attr("text-anchor","middle")
+                .attr("dominant-baseline","hanging")
+                .attr("font-weight","bold")
+                .attr("font-size","10px")
+                .attr("x", 100+100*i)
+                .attr("y",462)
+                .text("S")
+                .style("font-family","Arial");
+
+            svg2.append("text")
+                .attr("text-anchor","middle")
+                .attr("dominant-baseline","hanging")
+                .attr("font-weight","bold")
+                .attr("font-size","10px")
+                .attr("x", 100+100*i+25)
+                .attr("y",462)
+                .text("B")
+                .style("font-family","Arial");
+//Total medals
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)-37.5)
+                .attr("y",MedalScale(d.G))
+                .attr("height",460-MedalScale(d.G))
+                .attr("width","25")
+                // .style("fill","#FFD700");//gold
+                .style("fill","#33CC33");
+
+            svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","15px")
+               .attr("x",CountryScale(i+1)-25)
+               .attr("y",MedalScale(d.G))
+               .style("color","black")
+               .text(d.G);
+
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)-12.5)
+                .attr("y",MedalScale(d.S))
+                .attr("height",460-MedalScale(d.S))
+                .attr("width","25")
+                // .style("fill","#c0c0c0");//silver
+                .style("fill","#33CC33");
+            
+           svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","15px")
+               .attr("x",CountryScale(i+1))
+               .attr("y",MedalScale(d.S))
+               .style("color","black")
+               .text(d.S);
+            
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)+12.5)
+                .attr("y",MedalScale(d.B))
+                .attr("height",460-MedalScale(d.B))
+                .attr("width","25")
+                // .style("fill","#ba6e40");//bronze
+                .style("fill","#33CC33");
+
+           svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","15px")
+               .attr("x",CountryScale(i+1)+25)
+               .attr("y",MedalScale(d.B))
+               .style("color","black")
+               .text(d.B);
+//Medals by male
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)-37.5)
+                .attr("y",MedalScale(d.GM))
+                .attr("height",460-MedalScale(d.GM))
+                .attr("width","25")
+                .style("fill","#6060e0");
+            
+           svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",CountryScale(i+1)-25)
+               .attr("y",(MedalScale(d.GM)+460)/2)
+               .style("color","black")
+               .text(d.GM);
+            
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)-12.5)
+                .attr("y",MedalScale(d.SM))
+                .attr("height",460-MedalScale(d.SM))
+                .attr("width","25")
+                .style("fill","#6060e0");
+            
+            svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",CountryScale(i+1))
+               .attr("y",(MedalScale(d.SM)+460)/2)
+               .style("color","black")
+               .text(d.SM);
+            
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)+12.5)
+                .attr("y",MedalScale(d.BM))
+                .attr("height",460-MedalScale(d.BM))
+                .attr("width","25")
+                .style("fill","#6060e0");
+
+            svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",CountryScale(i+1)+25)
+               .attr("y",(MedalScale(d.BM)+460)/2)
+               .style("color","black")
+               .text(d.BM);
+//Medals by female
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)-37.5)
+                .attr("y",MedalScale(d.GF)-(460-MedalScale(d.GM)))
+                .attr("height",460-MedalScale(d.GF))
+                .attr("width","25")
+                .style("fill","#FF6600");
+                
+            svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",CountryScale(i+1)-25)
+               .attr("y",(MedalScale(d.GM)+MedalScale(d.GM)-460+MedalScale(d.GF))/2)
+               .style("color","black")
+               .text(d.GF);
+            
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)-12.5)
+                .attr("y",MedalScale(d.SF)-(460-MedalScale(d.SM)))
+                .attr("height",460-MedalScale(d.SF))
+                .attr("width","25")
+                .style("fill","#FF6600");
+            
+           svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",CountryScale(i+1))
+               .attr("y",(MedalScale(d.SM)+MedalScale(d.SM)-460+MedalScale(d.SF))/2)
+               .style("color","black")
+               .text(d.SF);
+            
+            svg2.append("rect")
+                .attr("x",CountryScale(i+1)+12.5)
+                .attr("y",MedalScale(d.BF)-(460-MedalScale(d.BM)))
+                .attr("height",460-MedalScale(d.BF))
+                .attr("width","25")
+                .style("fill","#FF6600");
+
+           svg2.append('text')
+               .attr("text-anchor","middle")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",CountryScale(i+1)+25)
+               .attr("y",(MedalScale(d.BM)+MedalScale(d.BM)-460+MedalScale(d.BF))/2)
+               .style("color","black")
+               .text(d.BF);
+
+            
+        });
+
+        //tags:
+        svg2.append("rect")
+                .attr("x",850)
+                .attr("y",10)
+                .attr("height",20)
+                .attr("width",40)
+                // .style("fill","#c0c0c0");//silver
+                .style("fill","#6060e0");
+
+        svg2.append('text')
+               .attr("text-anchor","start")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",900)
+               .attr("y",20)
+               .style("color","black")
+               .text("Medals by male");
+
+
+        svg2.append("rect")
+                .attr("x",850)
+                .attr("y",35)
+                .attr("height",20)
+                .attr("width",40)
+                // .style("fill","#c0c0c0");//silver
+                .style("fill","#FF6600");
+
+        svg2.append('text')
+               .attr("text-anchor","start")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",900)
+               .attr("y",45)
+               .style("color","black")
+               .text("Medals by female");
+
+        svg2.append("rect")
+                .attr("x",850)
+                .attr("y",60)
+                .attr("height",20)
+                .attr("width",40)
+                // .style("fill","#c0c0c0");//silver
+                .style("fill","#33CC33");
+        
+        svg2.append('text')
+               .attr("text-anchor","start")
+               .attr("dominant-baseline","middle")
+               .attr("font-family","Verdana")
+               .attr("font-weight","bold")
+               .attr("font-size","12px")
+               .attr("x",900)
+               .attr("y",70)
+               .style("color","black")
+               .text("Medals by group");
+
+
+
+
+
+
+
+
+
+        //  d3.csv('../graph2.csv',d3.autotype).then((data)=>{
+
+        //     data.forEach((d,i)=>{
+        //         svg2.append("rect")
+        //             .attr("x",xScale(i+1)-40)
+        //             .attr("y",yScale(d['medal_num_male']))
+        //             .attr("height",height-margin.bottom-yScale(d['medal_num_male']))
+        //             .attr("width","40")
+        //             .style("fill","blue");
+
+        //         svg2.append("rect")
+        //             .attr("x",xScale(i+1))
+        //             .attr("y",yScale(d['medal_num_female']))
+        //             .attr("height",height-margin.bottom-yScale(d['medal_num_female']))
+        //             .attr("width","40")
+        //             .style("fill","red");
+            
+        //     });
+
+        // });
+    </script>
